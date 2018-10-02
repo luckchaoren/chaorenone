@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Logback configuration. See http://logback.qos.ch/manual/index.html -->
+<configuration scan="true" scanPeriod="10 seconds">
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <property name="LOG_PATH" value="${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}"/>
+    <!--<property name="LOG_PATH" value="D:\logs"/>-->
+    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_PATH}/info.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/info-%d{yyyyMMdd}.log.%i</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>5MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>12</maxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n</Pattern>
+        </layout>
+    </appender>
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <File>${LOG_PATH}/error.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/error-%d{yyyyMMdd}.log.%i</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>5MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>12</maxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n</Pattern>
+        </layout>
+    </appender>
+    <!--<appender name="KAFKA_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+    <!--<File>${LOG_PATH}/kafka.log</File>-->
+    <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+    <!--<fileNamePattern>${LOG_PATH}/kafka-%d{yyyyMMdd}.log.%i</fileNamePattern>-->
+    <!--<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">-->
+    <!--<maxFileSize>5MB</maxFileSize>-->
+    <!--</timeBasedFileNamingAndTriggeringPolicy>-->
+    <!--<maxHistory>12</maxHistory>-->
+    <!--</rollingPolicy>-->
+    <!--<layout class="ch.qos.logback.classic.PatternLayout">-->
+    <!--<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%msg%n</Pattern>-->
+    <!--</layout>-->
+    <!--</appender>-->
+
+
+
+    <!--<root level="INFO">-->
+    <!--&lt;!&ndash; 控制台输出 &ndash;&gt;-->
+    <!--&lt;!&ndash;<appender-ref ref="console"/>&ndash;&gt;-->
+    <!--&lt;!&ndash; 文件输出 &ndash;&gt;-->
+    <!--<appender-ref ref="INFO_FILE"/>-->
+    <!--<appender-ref ref="ERROR_FILE"/>-->
+    <!--</root>-->
+    <!-- 指定项目中某个包，当有日志操作行为时的日志记录级别 -->
+    <!-- com.liyan为根包，也就是只要是发生在这个根包下面的所有日志操作行为的权限都是DEBUG -->
+    <!-- 级别依次为【从高到低】：FATAL > ERROR > WARN > INFO > DEBUG > TRACE  -->
+    <logger name="com.mongo.demo" level="DEBUG">
+        <appender-ref ref="INFO_FILE" />
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+
+</configuration>
